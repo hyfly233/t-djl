@@ -35,5 +35,7 @@ build/
 .vscode/
 .idea/
 
+.gradle
+
 ### Mac OS ###
 .DS_Store
