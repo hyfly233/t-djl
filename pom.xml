@@ -10,13 +10,15 @@
     <packaging>pom</packaging>
     <modules>
         <module>unit01</module>
+        <module>unit02</module>
     </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.30</lombok.version>
+        <commons.lang3.version>3.14.0</commons.lang3.version>
         <commons.cli.version>1.5.0</commons.cli.version>
         <log4j.slf4j.version>2.21.0</log4j.slf4j.version>
         <djl.version>0.26.0</djl.version>
@@ -32,6 +34,12 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
             </dependency>
 
             <dependency>
@@ -57,6 +65,7 @@
                 <artifactId>basicdataset</artifactId>
                 <version>${djl.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>ai.djl</groupId>
                 <artifactId>model-zoo</artifactId>
@@ -81,7 +90,13 @@
                 <version>${djl.version}</version>
             </dependency>
 
-            <!-- MXNet 0.26.0 还不支持 Mac M1 -->
+            <!-- MXNet -->
+            <dependency>
+                <groupId>ai.djl.mxnet</groupId>
+                <artifactId>mxnet-engine</artifactId>
+                <version>${djl.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>ai.djl.mxnet</groupId>
                 <artifactId>mxnet-model-zoo</artifactId>
@@ -101,7 +116,6 @@
                 <version>${djl.version}</version>
             </dependency>
 
-            <!-- M1 -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-native-cpu</artifactId>
@@ -109,7 +123,6 @@
                 <version>${pytorch.native.cpu.version}</version>
             </dependency>
 
-            <!-- M1 -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-jni</artifactId>

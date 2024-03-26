@@ -1,11 +1,11 @@
-package com.hyfly;
+package com.hyfly.unit01;
 
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class test02 {
+public class Test02 {
 
     public static void main(String[] args) {
         try (NDManager manager = NDManager.newBaseManager()) {

@@ -1,4 +1,4 @@
-package com.hyfly;
+package com.hyfly.unit01;
 
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
@@ -15,7 +15,7 @@ import java.io.FileWriter;
 import java.util.List;
 
 @Slf4j
-public class test03 {
+public class Test03 {
 
     public static void main(String[] args) throws Exception {
 
