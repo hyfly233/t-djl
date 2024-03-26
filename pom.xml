@@ -16,14 +16,24 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombok.version>1.18.30</lombok.version>
         <commons.cli.version>1.5.0</commons.cli.version>
         <log4j.slf4j.version>2.21.0</log4j.slf4j.version>
         <djl.version>0.26.0</djl.version>
+        <pytorch.native.cpu.version>2.1.1</pytorch.native.cpu.version>
+        <pytorch.jni.version>2.1.1-0.26.0</pytorch.jni.version>
+        <tablesaw.jsplot.version>0.43.1</tablesaw.jsplot.version>
+        <hutool.version>5.8.26</hutool.version>
     </properties>
 
     <dependencyManagement>
-
         <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>commons-cli</groupId>
                 <artifactId>commons-cli</artifactId>
@@ -91,19 +101,19 @@
                 <version>${djl.version}</version>
             </dependency>
 
+            <!-- M1 -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-native-cpu</artifactId>
                 <classifier>osx-aarch64</classifier>
-                <version>2.1.1</version>
-                <scope>runtime</scope>
+                <version>${pytorch.native.cpu.version}</version>
             </dependency>
 
+            <!-- M1 -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-jni</artifactId>
-                <version>2.1.1-0.26.0</version>
-                <scope>runtime</scope>
+                <version>${pytorch.jni.version}</version>
             </dependency>
 
             <!-- TensorFlow 0.26.0 还不支持 Mac M1 -->
@@ -118,6 +128,19 @@
                 <groupId>ai.djl.onnxruntime</groupId>
                 <artifactId>onnxruntime-engine</artifactId>
                 <version>${djl.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-jsplot -->
+            <dependency>
+                <groupId>tech.tablesaw</groupId>
+                <artifactId>tablesaw-jsplot</artifactId>
+                <version>${tablesaw.jsplot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
 
         </dependencies>
