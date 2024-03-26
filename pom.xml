@@ -71,12 +71,12 @@
                 <version>${djl.version}</version>
             </dependency>
 
-            <!-- MXNet -->
-            <!--        <dependency>-->
-            <!--            <groupId>ai.djl.mxnet</groupId>-->
-            <!--            <artifactId>mxnet-model-zoo</artifactId>-->
-            <!--            <version>${djl.version}</version>-->
-            <!--        </dependency>-->
+            <!-- MXNet 0.26.0 还不支持 Mac M1 -->
+            <dependency>
+                <groupId>ai.djl.mxnet</groupId>
+                <artifactId>mxnet-model-zoo</artifactId>
+                <version>${djl.version}</version>
+            </dependency>
 
             <!-- Pytorch -->
             <dependency>
@@ -106,19 +106,19 @@
                 <scope>runtime</scope>
             </dependency>
 
-            <!-- TensorFlow -->
-            <!--        <dependency>-->
-            <!--            <groupId>ai.djl.tensorflow</groupId>-->
-            <!--            <artifactId>tensorflow-model-zoo</artifactId>-->
-            <!--            <version>${djl.version}</version>-->
-            <!--        </dependency>-->
+            <!-- TensorFlow 0.26.0 还不支持 Mac M1 -->
+            <dependency>
+                <groupId>ai.djl.tensorflow</groupId>
+                <artifactId>tensorflow-model-zoo</artifactId>
+                <version>${djl.version}</version>
+            </dependency>
 
-            <!-- ONNXRuntime -->
-            <!--        <dependency>-->
-            <!--            <groupId>ai.djl.onnxruntime</groupId>-->
-            <!--            <artifactId>onnxruntime-engine</artifactId>-->
-            <!--            <version>${djl.version}</version>-->
-            <!--        </dependency>-->
+            <!-- ONNXRuntime 0.26.0 还不支持 Mac M1 -->
+            <dependency>
+                <groupId>ai.djl.onnxruntime</groupId>
+                <artifactId>onnxruntime-engine</artifactId>
+                <version>${djl.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
