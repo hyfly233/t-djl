@@ -99,7 +99,7 @@ public class Test05 {
             System.out.printf("Error in estimating w: [%f %f]\n", w[0], w[1]);
             System.out.printf("Error in estimating b: %f\n%n", trueB - bParam.getFloat());
 
-            // 报错模型
+            // 保存模型
             Path modelDir = Paths.get("../models/lin-reg");
             Files.createDirectories(modelDir);
 
