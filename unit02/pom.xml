@@ -17,6 +17,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ai.djl</groupId>
+                <artifactId>bom</artifactId>
+                <version>${djl.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -68,6 +80,22 @@
             <artifactId>audio</artifactId>
         </dependency>
 
+        <!-- MXNet -->
+        <!--<dependency>-->
+        <!--    <groupId>ai.djl.mxnet</groupId>-->
+        <!--    <artifactId>mxnet-engine</artifactId>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--    <groupId>ai.djl.mxnet</groupId>-->
+        <!--    <artifactId>mxnet-model-zoo</artifactId>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--    <groupId>ai.djl.mxnet</groupId>-->
+        <!--    <artifactId>mxnet-native-mkl</artifactId>-->
+        <!--</dependency>-->
+
         <!-- Pytorch -->
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
@@ -82,7 +110,6 @@
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
             <artifactId>pytorch-native-cpu</artifactId>
-            <classifier>osx-aarch64</classifier>
         </dependency>
 
         <dependency>

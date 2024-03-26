@@ -22,6 +22,7 @@
         <commons.cli.version>1.5.0</commons.cli.version>
         <log4j.slf4j.version>2.21.0</log4j.slf4j.version>
         <djl.version>0.26.0</djl.version>
+        <mxnet.native.mkl.version>1.9.1</mxnet.native.mkl.version>
         <pytorch.native.cpu.version>2.1.1</pytorch.native.cpu.version>
         <pytorch.jni.version>2.1.1-0.26.0</pytorch.jni.version>
         <tablesaw.jsplot.version>0.43.1</tablesaw.jsplot.version>
@@ -30,6 +31,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ai.djl</groupId>
+                <artifactId>bom</artifactId>
+                <version>${djl.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -103,6 +112,12 @@
                 <version>${djl.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>ai.djl.mxnet</groupId>
+                <artifactId>mxnet-native-mkl</artifactId>
+                <version>${mxnet.native.mkl.version}</version>
+            </dependency>
+
             <!-- Pytorch -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
@@ -119,7 +134,6 @@
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-native-cpu</artifactId>
-                <classifier>osx-aarch64</classifier>
                 <version>${pytorch.native.cpu.version}</version>
             </dependency>
 
@@ -129,14 +143,14 @@
                 <version>${pytorch.jni.version}</version>
             </dependency>
 
-            <!-- TensorFlow 0.26.0 还不支持 Mac M1 -->
+            <!-- TensorFlow -->
             <dependency>
                 <groupId>ai.djl.tensorflow</groupId>
                 <artifactId>tensorflow-model-zoo</artifactId>
                 <version>${djl.version}</version>
             </dependency>
 
-            <!-- ONNXRuntime 0.26.0 还不支持 Mac M1 -->
+            <!-- ONNXRuntime -->
             <dependency>
                 <groupId>ai.djl.onnxruntime</groupId>
                 <artifactId>onnxruntime-engine</artifactId>
