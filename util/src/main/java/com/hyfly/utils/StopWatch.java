@@ -3,7 +3,7 @@ package com.hyfly.utils;
 import java.util.ArrayList;
 
 // Saved in the d2l-java package for later use
-class StopWatch {
+public class StopWatch {
 
     // Record multiple running times.
     private final ArrayList<Double> times;

@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
-class Training {
+public class Training {
 
     public static NDArray linreg(NDArray X, NDArray w, NDArray b) {
         return X.matMul(w).add(b);

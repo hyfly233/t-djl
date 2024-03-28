@@ -4,6 +4,7 @@ import ai.djl.Device;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.util.Pair;
+import com.hyfly.utils.Functions;
 
 /**
  * An RNN Model implemented from scratch.

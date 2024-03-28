@@ -24,6 +24,7 @@ import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.tracker.Tracker;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.Pair;
+import com.hyfly.utils.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -312,7 +313,7 @@ public class TimeMachine {
                 updater.apply(1, childManager); // Since the `mean` function has been invoked
             }
         }
-        return new Pair<>(Math.exp(metric.get(0) / metric.get(1)), metric.get(1) / watch.stop());
+        return new Pair<>(Math.exp(metric.get(0) / metric.get(1)), (metric.get(1) / watch.stop()));
     }
 
     /**
