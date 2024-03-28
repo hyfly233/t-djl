@@ -13,8 +13,8 @@ import ai.djl.util.PairList;
 
 public class PositionalEncoding extends AbstractBlock {
 
-    public NDArray P;
     private final Dropout dropout;
+    public NDArray P;
 
     public PositionalEncoding(int numHiddens, float dropout, int maxLen, NDManager manager) {
         this.dropout = Dropout.builder().optRate(dropout).build();

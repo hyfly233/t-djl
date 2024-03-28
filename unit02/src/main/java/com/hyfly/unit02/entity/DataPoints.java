@@ -13,14 +13,6 @@ public class DataPoints {
         this.y = y;
     }
 
-    public NDArray getX() {
-        return X;
-    }
-
-    public NDArray getY() {
-        return y;
-    }
-
     public static DataPoints syntheticData(NDManager manager, NDArray w, float b, int numExamples) {
         NDArray X = manager.randomNormal(new Shape(numExamples, w.size()));
 //        NDArray y = X.dot(w).add(b);
@@ -28,5 +20,13 @@ public class DataPoints {
         // Add noise
         y = y.add(manager.randomNormal(0, 0.01f, y.getShape(), DataType.FLOAT32));
         return new DataPoints(X, y);
+    }
+
+    public NDArray getX() {
+        return X;
+    }
+
+    public NDArray getY() {
+        return y;
     }
 }

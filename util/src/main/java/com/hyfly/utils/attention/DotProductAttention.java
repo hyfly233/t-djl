@@ -13,8 +13,8 @@ import ai.djl.util.PairList;
 /* Scaled dot product attention. */
 public class DotProductAttention extends AbstractBlock {
 
-    public NDArray attentionWeights;
     private final Dropout dropout;
+    public NDArray attentionWeights;
     private Shape[] outputShapes;
 
     public DotProductAttention(float dropout) {

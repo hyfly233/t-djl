@@ -18,13 +18,13 @@ import java.util.Random;
 
 public class TimeMachineDataset extends RandomAccessDataset {
 
-    private Vocab vocab;
-    private NDArray data;
-    private NDArray labels;
     private final int numSteps;
     private final int maxTokens;
     private final int batchSize;
     private final NDManager manager;
+    private Vocab vocab;
+    private NDArray data;
+    private NDArray labels;
     private boolean prepared;
 
     public TimeMachineDataset(Builder builder) {

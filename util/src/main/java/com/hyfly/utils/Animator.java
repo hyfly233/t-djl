@@ -4,7 +4,6 @@ import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.api.LinePlot;
 
 /**
  * Animates a graph with real-time data.
@@ -48,7 +47,7 @@ public class Animator {
     // Display the graph
     public void show() {
         if (id.equals("")) {
-            id = display(LinePlot.create("", data, "epoch", "value", "metric"));
+//            id = display(LinePlot.create("", data, "epoch", "value", "metric"));
             return;
         }
         update();
@@ -56,6 +55,6 @@ public class Animator {
 
     // Update the graph
     public void update() {
-        updateDisplay(id, LinePlot.create("", data, "epoch", "value", "metric"));
+//        updateDisplay(id, LinePlot.create("", data, "epoch", "value", "metric"));
     }
 }

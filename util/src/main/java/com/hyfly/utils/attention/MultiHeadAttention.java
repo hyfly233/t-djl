@@ -13,12 +13,12 @@ import ai.djl.util.PairList;
 
 public class MultiHeadAttention extends AbstractBlock {
 
-    public DotProductAttention attention;
     private final int numHeads;
     private final Linear W_k;
     private final Linear W_q;
     private final Linear W_v;
     private final Linear W_o;
+    public DotProductAttention attention;
 
     public MultiHeadAttention(int numHiddens, int numHeads, float dropout, boolean useBias) {
         this.numHeads = numHeads;
