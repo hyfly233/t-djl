@@ -8,6 +8,7 @@ import ai.djl.ndarray.types.Shape;
 import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.training.util.DownloadUtils;
 import ai.djl.util.Pair;
+import com.hyfly.utils.timemachine.Vocab;
 
 import java.io.File;
 import java.io.IOException;
