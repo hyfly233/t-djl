@@ -13,6 +13,7 @@
         <module>unit02</module>
         <module>util</module>
         <module>unit03</module>
+        <module>unit04</module>
     </modules>
 
     <properties>
@@ -101,25 +102,6 @@
                 <version>${djl.version}</version>
             </dependency>
 
-            <!-- MXNet -->
-            <dependency>
-                <groupId>ai.djl.mxnet</groupId>
-                <artifactId>mxnet-engine</artifactId>
-                <version>${djl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ai.djl.mxnet</groupId>
-                <artifactId>mxnet-model-zoo</artifactId>
-                <version>${djl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ai.djl.mxnet</groupId>
-                <artifactId>mxnet-native-mkl</artifactId>
-                <version>${mxnet.native.mkl.version}</version>
-            </dependency>
-
             <!-- Pytorch -->
             <dependency>
                 <groupId>ai.djl.pytorch</groupId>
@@ -143,20 +125,6 @@
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-jni</artifactId>
                 <version>${pytorch.jni.version}</version>
-            </dependency>
-
-            <!-- TensorFlow -->
-            <dependency>
-                <groupId>ai.djl.tensorflow</groupId>
-                <artifactId>tensorflow-model-zoo</artifactId>
-                <version>${djl.version}</version>
-            </dependency>
-
-            <!-- ONNXRuntime -->
-            <dependency>
-                <groupId>ai.djl.onnxruntime</groupId>
-                <artifactId>onnxruntime-engine</artifactId>
-                <version>${djl.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-jsplot -->
