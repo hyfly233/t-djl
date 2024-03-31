@@ -14,6 +14,15 @@
         <module>util</module>
         <module>unit03</module>
         <module>unit04</module>
+        <module>unit05</module>
+        <module>unit06</module>
+        <module>unit07</module>
+        <module>unit08</module>
+        <module>unit09</module>
+        <module>unit10</module>
+        <module>unit11</module>
+        <module>unit12</module>
+        <module>unit13</module>
     </modules>
 
     <properties>
