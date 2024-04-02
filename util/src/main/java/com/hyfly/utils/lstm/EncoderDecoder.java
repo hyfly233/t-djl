@@ -8,13 +8,17 @@ import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.AbstractBlock;
 import ai.djl.training.ParameterStore;
 import ai.djl.util.PairList;
+import lombok.Getter;
 
 /**
  * The base class for the encoder-decoder architecture.
  */
 public class EncoderDecoder extends AbstractBlock {
 
+    @Getter
     protected Encoder encoder;
+
+    @Getter
     protected Decoder decoder;
 
     public EncoderDecoder(Encoder encoder, Decoder decoder) {
