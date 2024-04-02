@@ -2,19 +2,13 @@ package com.hyfly.unit12;
 
 import ai.djl.basicdataset.cv.BananaDetection;
 import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.ImageFactory;
-import ai.djl.modality.cv.output.BoundingBox;
-import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
-import ai.djl.ndarray.types.DataType;
 import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.Dataset;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 
 @Slf4j

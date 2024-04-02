@@ -52,7 +52,7 @@ public class Test01 {
                     FloatColumn.create("sigmoid(x)", Y2)
             );
 //            render(LinePlot.create("", data2, "x", "sigmoid(X)"));
-            try(GradientCollector collector = manager.getEngine().newGradientCollector()){
+            try (GradientCollector collector = manager.getEngine().newGradientCollector()) {
                 y = Activation.sigmoid(x);
                 collector.backward(y);
             }

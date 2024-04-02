@@ -103,7 +103,7 @@ public class Test02 {
                 String[] labels1 = {"dog=", "cat="};
                 String className = labels1[(int) bbox.getFloat(0)];
                 String prob = Float.toString(bbox.getFloat(1));
-                String label =  className + prob;
+                String label = className + prob;
                 drawBBoxes(img5, bbox.reshape(1, bbox.size()).get(new NDIndex(":, 2:")), new String[]{label});
             }
 

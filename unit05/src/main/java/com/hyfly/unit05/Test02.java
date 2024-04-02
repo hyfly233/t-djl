@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Test02 {
 
     public static void main(String[] args) {
-        try (NDManager manager = NDManager.newBaseManager()){
+        try (NDManager manager = NDManager.newBaseManager()) {
             NDArray X = manager.randomUniform(0f, 1.0f, new Shape(1, 1, 8, 8));
 
             // 请注意，这里每侧填充1行或1列，因此总共2行或1列
@@ -62,7 +62,7 @@ public class Test02 {
             block = Conv2d.builder()
                     .setKernelShape(new Shape(3, 3))
                     .optPadding(new Shape(1, 1))
-                    .optStride(new Shape(2,2))
+                    .optStride(new Shape(2, 2))
                     .setFilters(1)
                     .build();
 
@@ -78,7 +78,7 @@ public class Test02 {
             block = Conv2d.builder()
                     .setKernelShape(new Shape(3, 5))
                     .optPadding(new Shape(0, 1))
-                    .optStride(new Shape(3,4))
+                    .optStride(new Shape(3, 4))
                     .setFilters(1)
                     .build();
 

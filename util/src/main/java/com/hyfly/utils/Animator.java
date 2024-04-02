@@ -12,8 +12,8 @@ import tech.tablesaw.api.Table;
  */
 public class Animator {
 
-    private String id; // Id reference of graph(for updating graph)
     private final Table data; // Data Points
+    private String id; // Id reference of graph(for updating graph)
 
     public Animator() {
         id = "";

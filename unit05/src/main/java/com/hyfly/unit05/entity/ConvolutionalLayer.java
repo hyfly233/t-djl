@@ -10,20 +10,20 @@ public class ConvolutionalLayer {
     private NDArray w;
     private NDArray b;
 
-    public NDArray getW() {
-        return w;
-    }
-
-    public NDArray getB() {
-        return b;
-    }
-
     public ConvolutionalLayer(Shape shape) {
         try (NDManager manager = NDManager.newBaseManager()) {
             w = manager.create(shape);
             b = manager.randomNormal(new Shape(1));
             w.setRequiresGradient(true);
         }
+    }
+
+    public NDArray getW() {
+        return w;
+    }
+
+    public NDArray getB() {
+        return b;
     }
 
     public NDArray forward(NDArray X) {

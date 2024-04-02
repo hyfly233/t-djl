@@ -1,6 +1,5 @@
 package com.hyfly.unit04.entity;
 
-import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.DataType;
@@ -12,6 +11,7 @@ import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.core.Linear;
 import ai.djl.training.ParameterStore;
 import ai.djl.util.PairList;
+
 public class NestMLP extends AbstractBlock {
 
     private SequentialBlock net;

@@ -11,7 +11,6 @@ import ai.djl.training.GradientCollector;
 import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.Dataset;
 import ai.djl.training.loss.Loss;
-import com.hyfly.utils.Training;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import tech.tablesaw.api.DoubleColumn;
@@ -79,7 +78,7 @@ public class Test02 {
                     NDArray X = batch.getData().head();
                     NDArray y = batch.getLabels().head();
 
-                    try(GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+                    try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
 //                        NDArray yHat = net(X); // net function call
 
 //                        NDArray lossValue = loss.evaluate(new NDList(y), new NDList(yHat));
@@ -95,8 +94,8 @@ public class Test02 {
 //                    Training.sgd(params, lr, batchSize); // updater
                 }
 
-                trainLoss[epoch-1] = epochLoss/trainIter.size();
-                trainAccuracy[epoch-1] = accuracyVal/trainIter.size();
+                trainLoss[epoch - 1] = epochLoss / trainIter.size();
+                trainAccuracy[epoch - 1] = accuracyVal / trainIter.size();
 
                 epochLoss = 0f;
                 accuracyVal = 0f;
@@ -110,8 +109,8 @@ public class Test02 {
 //                    accuracyVal += Training.accuracy(yHat, y);
                 }
 
-                testAccuracy[epoch-1] = accuracyVal/testIter.size();
-                epochCount[epoch-1] = epoch;
+                testAccuracy[epoch - 1] = accuracyVal / testIter.size();
+                epochCount[epoch - 1] = epoch;
                 accuracyVal = 0f;
                 System.out.println("Finished epoch " + epoch);
             }

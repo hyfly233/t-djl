@@ -37,6 +37,16 @@ public class MyLinear extends AbstractBlock {
                         .build());
     }
 
+    // Applies linear transformation
+    public static NDArray linear(NDArray input, NDArray weight, NDArray bias) {
+        return input.dot(weight).add(bias);
+    }
+
+    // Applies relu transformation
+    public static NDList relu(NDArray input) {
+        return new NDList(Activation.relu(input));
+    }
+
     @Override
     protected NDList forwardInternal(
             ParameterStore parameterStore,
@@ -49,16 +59,6 @@ public class MyLinear extends AbstractBlock {
         NDArray weightArr = parameterStore.getValue(weight, device, false);
         NDArray biasArr = parameterStore.getValue(bias, device, false);
         return relu(linear(input, weightArr, biasArr));
-    }
-
-    // Applies linear transformation
-    public static NDArray linear(NDArray input, NDArray weight, NDArray bias) {
-        return input.dot(weight).add(bias);
-    }
-
-    // Applies relu transformation
-    public static NDList relu(NDArray input) {
-        return new NDList(Activation.relu(input));
     }
 
     @Override
