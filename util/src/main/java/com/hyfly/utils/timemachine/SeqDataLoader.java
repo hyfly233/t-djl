@@ -55,7 +55,7 @@ public class SeqDataLoader implements Iterable<NDList> {
     /**
      * Generate a minibatch of subsequences using random sampling.
      */
-    public List<NDList> seqDataIterRandom(
+    public static List<NDList> seqDataIterRandom(
             List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
         // Start with a random offset (inclusive of `numSteps - 1`) to partition a
         // sequence
@@ -104,7 +104,7 @@ public class SeqDataLoader implements Iterable<NDList> {
         return pairs;
     }
 
-    List<Integer> data(int pos, List<Integer> corpus, int numSteps) {
+    public static List<Integer> data(int pos, List<Integer> corpus, int numSteps) {
         // Return a sequence of length `numSteps` starting from `pos`
         return new ArrayList<>(corpus.subList(pos, pos + numSteps));
     }
@@ -112,7 +112,7 @@ public class SeqDataLoader implements Iterable<NDList> {
     /**
      * Generate a minibatch of subsequences using sequential partitioning.
      */
-    public List<NDList> seqDataIterSequential(
+    public static List<NDList> seqDataIterSequential(
             List<Integer> corpus, int batchSize, int numSteps, NDManager manager) {
         // Start with a random offset to partition a sequence
         int offset = new Random().nextInt(numSteps);
