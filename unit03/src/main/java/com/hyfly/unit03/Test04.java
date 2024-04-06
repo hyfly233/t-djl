@@ -19,6 +19,7 @@ import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.tracker.Tracker;
 import ai.djl.translate.TranslateException;
 import ai.djl.util.RandomUtils;
+import com.hyfly.utils.Training;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.special.Gamma;
@@ -196,14 +197,6 @@ public class Test04 {
         return arr;
     }
 
-    public static ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
-        return new ArrayDataset.Builder()
-                .setData(features) // set the features
-                .optLabels(labels) // set the labels
-                .setSampling(batchSize, shuffle) // set the batch size and random sampling
-                .build();
-    }
-
     public static void train(NDArray trainFeatures, NDArray testFeatures, NDArray trainLabels, NDArray testLabels, int nDegree,
                              int numEpochs, int logInterval, double[] trainLoss, double[] testLoss, double[] epochCount)
             throws IOException, TranslateException {
@@ -229,8 +222,8 @@ public class Test04 {
 
         int batchSize = Math.min(10, (int) trainLabels.getShape().get(0));
 
-        ArrayDataset trainIter = loadArray(trainFeatures, trainLabels, batchSize, true);
-        ArrayDataset testIter = loadArray(testFeatures, testLabels, batchSize, true);
+        ArrayDataset trainIter = Training.loadArray(trainFeatures, trainLabels, batchSize, true);
+        ArrayDataset testIter = Training.loadArray(testFeatures, testLabels, batchSize, true);
 
         trainer.initialize(new Shape(1, nDegree));
         System.out.println("Start Training...");

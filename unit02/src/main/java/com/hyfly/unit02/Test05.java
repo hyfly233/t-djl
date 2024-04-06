@@ -6,6 +6,7 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Block;
+import ai.djl.nn.Parameter;
 import ai.djl.nn.ParameterList;
 import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.core.Linear;
@@ -19,6 +20,7 @@ import ai.djl.training.loss.Loss;
 import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.tracker.Tracker;
 import com.hyfly.utils.DataPoints;
+import com.hyfly.utils.Training;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Files;
@@ -30,6 +32,7 @@ public class Test05 {
 
     public static void main(String[] args) throws Exception {
         try (NDManager manager = NDManager.newBaseManager()) {
+            // 3.3.1. 生成数据
             NDArray trueW = manager.create(new float[]{2, -3.4f});
             float trueB = 4.2f;
 
@@ -37,16 +40,18 @@ public class Test05 {
             NDArray features = dp.getX();
             NDArray labels = dp.getY();
 
+            // 3.3.2. 读取数据
             int batchSize = 10;
-            ArrayDataset dataset = loadArray(features, labels, batchSize, false);
+            ArrayDataset dataset = Training.loadArray(features, labels, batchSize, false);
 
             Batch batch = dataset.getData(manager).iterator().next();
             NDArray x = batch.getData().head();
             NDArray y = batch.getLabels().head();
-            System.out.println(x);
-            System.out.println(y);
+            log.info(x.toDebugString(true));
+            log.info(y.toDebugString(true));
             batch.close();
 
+            // 3.3.3. 定义模型
             Model model = Model.newInstance("lin-reg");
 
             SequentialBlock net = new SequentialBlock();
@@ -55,11 +60,14 @@ public class Test05 {
 
             model.setBlock(net);
 
+            // 3.3.4. 定义损失函数 - 平方损失
             Loss l2loss = Loss.l2Loss();
 
+            // 3.3.5. 定义优化算法 - 小批量随机梯度下降
             Tracker lrt = Tracker.fixed(0.03f);
             Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
 
+            // 3.3.6. Trainer 的初始化配置
             DefaultTrainingConfig config = new DefaultTrainingConfig(l2loss)
                     .optOptimizer(sgd) // Optimizer (loss function)
                     .optDevices(manager.getEngine().getDevices(1)) // single GPU
@@ -67,15 +75,20 @@ public class Test05 {
 
             Trainer trainer = model.newTrainer(config);
 
+            // 3.3.7. 初始化模型参数
+            // First axis is batch size - won't impact parameter initialization
+            // Second axis is the input size
             trainer.initialize(new Shape(batchSize, 2));
 
+            // 3.3.8. 运行性能指标
             Metrics metrics = new Metrics();
             trainer.setMetrics(metrics);
 
+            // 3.3.9. 训练
             int numEpochs = 3;
 
             for (int epoch = 1; epoch <= numEpochs; epoch++) {
-                System.out.printf("Epoch %d\n", epoch);
+                log.info("Epoch {}", epoch);
                 // Iterate over dataset
                 for (Batch batch01 : trainer.iterateDataset(dataset)) {
                     // Update loss and evaulator
@@ -92,30 +105,24 @@ public class Test05 {
 
             Block layer = model.getBlock();
             ParameterList params = layer.getParameters();
-            NDArray wParam = params.valueAt(0).getArray();
-            NDArray bParam = params.valueAt(1).getArray();
+            try (Parameter parameter0 = params.valueAt(0);
+                 Parameter parameter1 = params.valueAt(1)) {
+                NDArray wParam = parameter0.getArray();
+                NDArray bParam = parameter1.getArray();
 
-            float[] w = trueW.sub(wParam.reshape(trueW.getShape())).toFloatArray();
-            System.out.printf("Error in estimating w: [%f %f]\n", w[0], w[1]);
-            System.out.printf("Error in estimating b: %f\n%n", trueB - bParam.getFloat());
+                float[] w = trueW.sub(wParam.reshape(trueW.getShape())).toFloatArray();
+                log.info("Error in estimating w: [{} {}]", w[0], w[1]);
+                log.info("Error in estimating b: {}", trueB - bParam.getFloat());
 
-            // 保存模型
-            Path modelDir = Paths.get("../models/lin-reg");
-            Files.createDirectories(modelDir);
+                // 3.3.10. 保存训练模型
+                Path modelDir = Paths.get("./models/lin-reg");
+                Files.createDirectories(modelDir);
 
-            model.setProperty("Epoch", Integer.toString(numEpochs)); // save epochs trained as metadata
+                model.setProperty("Epoch", Integer.toString(numEpochs)); // save epochs trained as metadata
+                model.save(modelDir, "lin-reg");
 
-            model.save(modelDir, "lin-reg");
-
-            log.info(model.toString());
+                log.info(model.toString());
+            }
         }
-    }
-
-    public static ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
-        return new ArrayDataset.Builder()
-                .setData(features) // set the features
-                .optLabels(labels) // set the labels
-                .setSampling(batchSize, shuffle) // set the batch size and random sampling
-                .build();
     }
 }

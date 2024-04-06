@@ -39,11 +39,11 @@ public class Test05 {
 
         DataPoints trainData = DataPoints.syntheticData(manager, trueW, trueB, nTrain);
 
-        ArrayDataset trainIter = loadArray(trainData.getX(), trainData.getY(), batchSize, true);
+        ArrayDataset trainIter = Training.loadArray(trainData.getX(), trainData.getY(), batchSize, true);
 
         DataPoints testData = DataPoints.syntheticData(manager, trueW, trueB, nTest);
 
-        ArrayDataset testIter = loadArray(testData.getX(), testData.getY(), batchSize, false);
+        ArrayDataset testIter = Training.loadArray(testData.getX(), testData.getY(), batchSize, false);
 
         Loss l2loss = Loss.l2Loss();
 
@@ -82,14 +82,6 @@ public class Test05 {
         );
 
 //        render(LinePlot.create("", data1, "epochCount", "loss", "lossLabel"),"text/html");
-    }
-
-    public static ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
-        return new ArrayDataset.Builder()
-                .setData(features) // set the features
-                .optLabels(labels) // set the labels
-                .setSampling(batchSize, shuffle) // set the batch size and random sampling
-                .build();
     }
 
     public static NDArray l2Penalty(NDArray w) {

@@ -164,4 +164,21 @@ public class Training {
         return metric.get(0) / metric.get(1);
     }
     /* End MLP */
+
+    /**
+     * ArrayDataset 数据集
+     *
+     * @param features  特征
+     * @param labels    标签
+     * @param batchSize 批量大小
+     * @param shuffle   是否打乱
+     * @return ArrayDataset
+     */
+    public static ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
+        return new ArrayDataset.Builder()
+                .setData(features) // set the features
+                .optLabels(labels) // set the labels
+                .setSampling(batchSize, shuffle) // set the batch size and random sampling
+                .build();
+    }
 }
