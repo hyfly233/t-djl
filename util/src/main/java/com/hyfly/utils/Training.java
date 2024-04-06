@@ -18,16 +18,41 @@ import java.util.function.UnaryOperator;
 
 public class Training {
 
+    /**
+     * 3.2.4. 定义模型
+     * Linear regression 模型: 将输入和权重相乘，然后加上偏差
+     *
+     * @param X input 输入特征
+     * @param w weight 模型权重
+     * @param b bias 模型偏差
+     * @return X * w + b
+     */
     public static NDArray linreg(NDArray X, NDArray w, NDArray b) {
         return X.matMul(w).add(b);
     }
 
+    /**
+     * 3.2.5. 定义损失函数
+     * 平方损失函数 最小二乘损失
+     *
+     * @param yHat 预测值
+     * @param y    真实值
+     * @return 损失值
+     */
     public static NDArray squaredLoss(NDArray yHat, NDArray y) {
         return (yHat.sub(y.reshape(yHat.getShape())))
                 .mul((yHat.sub(y.reshape(yHat.getShape()))))
                 .div(2);
     }
 
+    /**
+     * 3.2.6. 定义优化算法
+     * 随机梯度下降
+     *
+     * @param params    模型参数
+     * @param lr        学习率
+     * @param batchSize 批量大小
+     */
     public static void sgd(NDList params, float lr, int batchSize) {
         for (NDArray param : params) {
             // Update param in place.

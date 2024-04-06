@@ -4,7 +4,7 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
 import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.training.dataset.Batch;
-import com.hyfly.unit02.entity.DataPoints;
+import com.hyfly.utils.DataPoints;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

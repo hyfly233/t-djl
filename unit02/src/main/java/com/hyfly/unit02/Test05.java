@@ -18,7 +18,7 @@ import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.tracker.Tracker;
-import com.hyfly.unit02.entity.DataPoints;
+import com.hyfly.utils.DataPoints;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Files;
