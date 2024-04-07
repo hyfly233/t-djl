@@ -12,11 +12,12 @@ public class InitParams {
     private NDList l;
 
     public InitParams() {
-        NDManager manager = NDManager.newBaseManager();
-//        w = manager.randomNormal(0, 1.0f, new Shape(numInputs, 1), DataType.FLOAT32);
-        b = manager.zeros(new Shape(1));
-        w.setRequiresGradient(true);
-        b.setRequiresGradient(true);
+        try(NDManager manager = NDManager.newBaseManager()){
+            //        w = manager.randomNormal(0, 1.0f, new Shape(numInputs, 1), DataType.FLOAT32);
+            b = manager.zeros(new Shape(1));
+            w.setRequiresGradient(true);
+            b.setRequiresGradient(true);
+        }
     }
 
     public NDArray getW() {
