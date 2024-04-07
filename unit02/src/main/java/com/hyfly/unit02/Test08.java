@@ -19,6 +19,9 @@ import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.tracker.Tracker;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 3.7. Softmax 回归的简洁实现
+ */
 @Slf4j
 public class Test08 {
 
@@ -40,7 +43,7 @@ public class Test08 {
                 .optLimit(Long.getLong("DATASET_LIMIT", Long.MAX_VALUE))
                 .build();
 
-        // 3.7.1. 初始化模型参数
+        log.info("3.7.1. 初始化模型参数 ------------");
         try (NDManager manager = NDManager.newBaseManager();
              Model model = Model.newInstance("softmax-regression")) {
 
@@ -50,14 +53,14 @@ public class Test08 {
 
             model.setBlock(net);
 
-            // 3.7.2. 重新审视 Softmax 的实现
+            log.info("3.7.2. 重新审视 Softmax 的实现 ------------");
             Loss loss = Loss.softmaxCrossEntropyLoss();
 
-            // 3.7.3. 优化算法
+            log.info("3.7.3. 优化算法 ------------");
             Tracker lrt = Tracker.fixed(0.1f);
             Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
 
-            // 3.7.4. Trainer 的初始化配置
+            log.info("3.7.4. Trainer 的初始化配置 ------------");
             DefaultTrainingConfig config = new DefaultTrainingConfig(loss)
                     .optOptimizer(sgd) // Optimizer
                     .optDevices(manager.getEngine().getDevices(1)) // single GPU
@@ -66,14 +69,14 @@ public class Test08 {
 
             Trainer trainer = model.newTrainer(config);
 
-            // 3.7.5. 初始化模型参数
+            log.info("3.7.5. 初始化模型参数 ------------");
             trainer.initialize(new Shape(1, 28 * 28)); // Input Images are 28 x 28
 
-            // 3.7.6. 运行性能指标
+            log.info("3.7.6. 运行性能指标 ------------");
             Metrics metrics = new Metrics();
             trainer.setMetrics(metrics);
 
-            // 3.7.7. 训练
+            log.info("3.7.7. 训练 ------------");
             int numEpochs = 3;
 
             EasyTrain.fit(trainer, numEpochs, trainingSet, validationSet);

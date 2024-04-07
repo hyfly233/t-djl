@@ -1,26 +1,29 @@
 package com.hyfly.unit02;
 
 import ai.djl.basicdataset.cv.classification.FashionMnist;
+import ai.djl.engine.Engine;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.index.NDIndex;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.ndarray.types.Shape;
+import ai.djl.training.GradientCollector;
 import ai.djl.training.dataset.ArrayDataset;
 import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.Dataset;
 import ai.djl.translate.TranslateException;
-import com.hyfly.utils.FashionMnistUtils;
-import com.hyfly.utils.Softmax;
+import com.hyfly.utils.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.function.UnaryOperator;
+import java.util.function.BinaryOperator;
 
-import static com.hyfly.utils.Training.accuracy;
 
+/**
+ * 3.6. Softmax 回归的从零开始实现
+ */
 @Slf4j
 public class Test07 {
 
@@ -51,6 +54,7 @@ public class Test07 {
             NDList params = new NDList(W, b);
 
             // 3.6.2. 定义 softmax 操作
+            log.info("3.6.2. 定义 softmax 操作 -----------------");
             NDArray X = manager.create(new int[][]{{1, 2, 3}, {4, 5, 6}});
             log.info(X.sum(new int[]{0}, true).toDebugString(true));
             log.info(X.sum(new int[]{1}, true).toDebugString(true));
@@ -63,83 +67,102 @@ public class Test07 {
             log.info(xprob.sum(new int[]{1}).toDebugString(true));
 
             // 3.6.4. 定义损失函数
+            log.info("3.6.4. 定义损失函数 -----------------");
             NDArray yHat = manager.create(new float[][]{{0.1f, 0.3f, 0.6f}, {0.3f, 0.2f, 0.5f}});
             NDArray ndArray = yHat.get(new NDIndex(":, {}", manager.create(new int[]{0, 2})));
             log.info(ndArray.toDebugString(true));
 
             // 3.6.5. 计算分类准确率
+            log.info("3.6.5. 计算分类准确率 -----------------");
             NDArray y = manager.create(new int[]{0, 2});
-            float v = accuracy(yHat, y) / y.size();
-            log.info("accuracy: {}", v);
+            float v = Training.accuracy(yHat, y) / y.size();
+            log.info("Training.accuracy: {}", v);
 
-//            evaluateAccuracy(Net.net(params, X, numInputs), validationSet.getData(manager));
+            float v1 = Training.evaluateAccuracy(params, numInputs, validationSet.getData(manager));
+            log.info("Training.evaluateAccuracy: {}", v1);
+
             // 3.6.6. 训练模型
-
+            log.info("3.6.6. 训练模型 -----------------");
             int numEpochs = 5;
             float lr = 0.1f;
 
-//            trainCh3(Net::net, trainingSet, validationSet, LossFunction::crossEntropy, numEpochs, Updater::updater);
-//
-//            predictCh3(Net::net, validationSet, 6, manager);
+            trainCh3(trainingSet, validationSet, LossFunction::crossEntropy, numEpochs, Updater::updater, params, numInputs, lr, manager);
+
+            BufferedImage image = predictCh3(params, numInputs, validationSet, 6, manager);
+            log.info("image: {}", image);
         }
 
     }
 
     @FunctionalInterface
-    public static interface ParamConsumer {
+    public interface ParamConsumer {
         void accept(NDList params, float lr, int batchSize);
     }
 
-//    public static float[] trainEpochCh3(UnaryOperator<NDArray> net, Iterable<Batch> trainIter, BinaryOperator<NDArray> loss, ParamConsumer updater) {
-//        Accumulator metric = new Accumulator(3); // trainLossSum, trainAccSum, numExamples
-//
-//        // Attach Gradients
-//        for (NDArray param : params) {
-//            param.setRequiresGradient(true);
-//        }
-//
-//        for (Batch batch : trainIter) {
-//            NDArray X = batch.getData().head();
-//            NDArray y = batch.getLabels().head();
-//            X = X.reshape(new Shape(-1, numInputs));
-//
-//            try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
-//                // Minibatch loss in X and y
-//                NDArray yHat = net.apply(X);
-//                NDArray l = loss.apply(yHat, y);
-//                gc.backward(l);  // Compute gradient on l with respect to w and b
-//                metric.add(new float[]{l.sum().toType(DataType.FLOAT32, false).getFloat(),
-//                        accuracy(yHat, y),
-//                        (float) y.size()});
-//                gc.close();
-//            }
-//            updater.accept(params, lr, batch.getSize());  // Update parameters using their gradient
-//
-//            batch.close();
-//        }
-//        // Return trainLoss, trainAccuracy
-//        return new float[]{metric.get(0) / metric.get(2), metric.get(1) / metric.get(2)};
-//    }
-//
-//    public static void trainCh3(UnaryOperator<NDArray> net, Dataset trainDataset, Dataset testDataset,
-//                                BinaryOperator<NDArray> loss, int numEpochs, ParamConsumer updater)
-//            throws IOException, TranslateException {
-//        Animator animator = new Animator();
-//        for (int i = 1; i <= numEpochs; i++) {
-//            float[] trainMetrics = trainEpochCh3(net, trainDataset.getData(manager), loss, updater);
-//            float accuracy = evaluateAccuracy(net, testDataset.getData(manager));
-//            float trainAccuracy = trainMetrics[1];
-//            float trainLoss = trainMetrics[0];
-//
-//            animator.add(i, accuracy, trainAccuracy, trainLoss);
-//            System.out.printf("Epoch %d: Test Accuracy: %f\n", i, accuracy);
-//            System.out.printf("Train Accuracy: %f\n", trainAccuracy);
-//            System.out.printf("Train Loss: %f\n", trainLoss);
-//        }
-//    }
+    public static float[] trainEpochCh3(Iterable<Batch> trainIter,
+                                        BinaryOperator<NDArray> loss,
+                                        ParamConsumer updater,
+                                        NDList params,
+                                        int numInputs,
+                                        float lr) {
+        Accumulator metric = new Accumulator(3); // trainLossSum, trainAccSum, numExamples
 
-    // Number should be < batchSize for this function to work properly
-    public static BufferedImage predictCh3(UnaryOperator<NDArray> net, ArrayDataset dataset, int number, NDManager manager)
+        // Attach Gradients
+        for (NDArray param : params) {
+            param.setRequiresGradient(true);
+        }
+
+        for (Batch batch : trainIter) {
+            NDArray X = batch.getData().head();
+            NDArray y = batch.getLabels().head();
+            X = X.reshape(new Shape(-1, numInputs));
+
+            try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+                // Minibatch loss in X and y
+                NDArray currentW = params.get(0);
+                NDArray currentB = params.get(1);
+
+                NDArray yHat = Softmax.softmax(X.reshape(new Shape(-1, numInputs)).dot(currentW).add(currentB));
+                NDArray l = loss.apply(yHat, y);
+                gc.backward(l);  // Compute gradient on l with respect to w and b
+                metric.add(new float[]{l.sum().toType(DataType.FLOAT32, false).getFloat(),
+                        Training.accuracy(yHat, y),
+                        (float) y.size()});
+                gc.close();
+            }
+            updater.accept(params, lr, batch.getSize());  // Update parameters using their gradient
+
+            batch.close();
+        }
+        // Return trainLoss, trainAccuracy
+        return new float[]{metric.get(0) / metric.get(2), metric.get(1) / metric.get(2)};
+    }
+
+    public static void trainCh3(Dataset trainDataset,
+                                Dataset testDataset,
+                                BinaryOperator<NDArray> loss,
+                                int numEpochs,
+                                ParamConsumer updater,
+                                NDList params,
+                                int numInputs,
+                                float lr,
+                                NDManager manager)
+            throws IOException, TranslateException {
+        Animator animator = new Animator();
+        for (int i = 1; i <= numEpochs; i++) {
+            float[] trainMetrics = trainEpochCh3(trainDataset.getData(manager), loss, updater, params, numInputs, lr);
+            float accuracy = Training.evaluateAccuracy(params, numInputs, testDataset.getData(manager));
+            float trainAccuracy = trainMetrics[1];
+            float trainLoss = trainMetrics[0];
+
+            animator.add(i, accuracy, trainAccuracy, trainLoss);
+            log.info("Epoch {}: Test Accuracy: {}", i, accuracy);
+            log.info("Train Accuracy: {}", trainAccuracy);
+            log.info("Train Loss: {}", trainLoss);
+        }
+    }
+
+    public static BufferedImage predictCh3(NDList params, int numInputs, ArrayDataset dataset, int number, NDManager manager)
             throws IOException, TranslateException {
         final int SCALE = 4;
         final int WIDTH = 28;
@@ -148,11 +171,14 @@ public class Test07 {
         int[] predLabels = new int[number];
 
         for (Batch batch : dataset.getData(manager)) {
-            NDArray X = batch.getData().head();
-            int[] yHat = net.apply(X).argMax(1).toType(DataType.INT32, false).toIntArray();
-            for (int i = 0; i < number; i++) {
-                predLabels[i] = yHat[i];
-            }
+            NDList data = batch.getData();
+            NDArray X = data.head();
+            NDArray currentW = params.get(0);
+            NDArray currentB = params.get(1);
+            NDArray softmax = Softmax.softmax(X.reshape(new Shape(-1, numInputs)).dot(currentW).add(currentB));
+
+            int[] yHat = softmax.argMax(1).toType(DataType.INT32, false).toIntArray();
+            System.arraycopy(yHat, 0, predLabels, 0, number);
             break;
         }
 

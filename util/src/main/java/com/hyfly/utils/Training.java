@@ -5,6 +5,7 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.DataType;
+import ai.djl.ndarray.types.Shape;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.dataset.ArrayDataset;
@@ -145,6 +146,23 @@ public class Training {
         return metric.get(0) / metric.get(1);
     }
     /* End Softmax-regression-scratch */
+
+    public static float evaluateAccuracy(NDList params, int numInputs, Iterable<Batch> dataIterator) {
+        Accumulator metric = new Accumulator(2); // numCorrectedExamples, numExamples
+        for (Batch batch : dataIterator) {
+            NDArray X = batch.getData().head();
+            NDArray y = batch.getLabels().head();
+
+            NDArray currentW = params.get(0);
+            NDArray currentB = params.get(1);
+            NDArray softmax = Softmax.softmax(X.reshape(new Shape(-1, numInputs)).dot(currentW).add(currentB));
+
+            metric.add(new float[]{accuracy(softmax, y), (float) y.size()});
+            batch.close();
+        }
+        return metric.get(0) / metric.get(1);
+    }
+
 
     /* MLP */
     /* Evaluate the loss of a model on the given dataset */
