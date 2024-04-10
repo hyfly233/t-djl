@@ -27,20 +27,25 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * 3.3. 线性回归的简洁实现
+ */
 @Slf4j
 public class Test05 {
 
     public static void main(String[] args) throws Exception {
         try (NDManager manager = NDManager.newBaseManager()) {
-            // 3.3.1. 生成数据
+            log.info("3.3.1. 生成数据 ------------");
             NDArray trueW = manager.create(new float[]{2, -3.4f});
+            log.info("trueW: {}", trueW.toDebugString(true));
+
             float trueB = 4.2f;
 
             DataPoints dp = DataPoints.syntheticData(manager, trueW, trueB, 1000);
             NDArray features = dp.getX();
             NDArray labels = dp.getY();
 
-            // 3.3.2. 读取数据
+            log.info("3.3.2. 读取数据 ------------");
             int batchSize = 10;
             ArrayDataset dataset = Training.loadArray(features, labels, batchSize, false);
 
@@ -51,7 +56,7 @@ public class Test05 {
             log.info(y.toDebugString(true));
             batch.close();
 
-            // 3.3.3. 定义模型
+            log.info("3.3.3. 定义模型 ------------");
             Model model = Model.newInstance("lin-reg");
 
             SequentialBlock net = new SequentialBlock();
@@ -60,14 +65,14 @@ public class Test05 {
 
             model.setBlock(net);
 
-            // 3.3.4. 定义损失函数 - 平方损失
+            log.info("3.3.4. 定义损失函数 平方损失 ------------");
             Loss l2loss = Loss.l2Loss();
 
-            // 3.3.5. 定义优化算法 - 小批量随机梯度下降
+            log.info("3.3.5. 定义优化算法 小批量随机梯度下降 ------------");
             Tracker lrt = Tracker.fixed(0.03f);
             Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
 
-            // 3.3.6. Trainer 的初始化配置
+            log.info("3.3.6. Trainer 的初始化配置 ------------");
             DefaultTrainingConfig config = new DefaultTrainingConfig(l2loss)
                     .optOptimizer(sgd) // Optimizer (loss function)
                     .optDevices(manager.getEngine().getDevices(1)) // single GPU
@@ -75,16 +80,16 @@ public class Test05 {
 
             Trainer trainer = model.newTrainer(config);
 
-            // 3.3.7. 初始化模型参数
+            log.info("3.3.7. 初始化模型参数 ------------");
             // First axis is batch size - won't impact parameter initialization
             // Second axis is the input size
             trainer.initialize(new Shape(batchSize, 2));
 
-            // 3.3.8. 运行性能指标
+            log.info("3.3.8. 运行性能指标 ------------");
             Metrics metrics = new Metrics();
             trainer.setMetrics(metrics);
 
-            // 3.3.9. 训练
+            log.info("3.3.9. 训练 ------------");
             int numEpochs = 3;
 
             for (int epoch = 1; epoch <= numEpochs; epoch++) {
@@ -114,7 +119,7 @@ public class Test05 {
                 log.info("Error in estimating w: [{} {}]", w[0], w[1]);
                 log.info("Error in estimating b: {}", trueB - bParam.getFloat());
 
-                // 3.3.10. 保存训练模型
+                log.info("3.3.10. 保存训练模型 ------------");
                 Path modelDir = Paths.get("./models/lin-reg");
                 Files.createDirectories(modelDir);
 

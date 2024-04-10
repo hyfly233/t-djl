@@ -25,8 +25,6 @@ public class Test04 {
         try (NDManager manager = NDManager.newBaseManager()) {
             // 3.2.1. 生成数据集
             NDArray trueW = manager.create(new float[]{2, -3.4f});
-            log.info("trueW: {}", trueW.toDebugString(true));
-
             float trueB = 4.2f;
 
             DataPoints dp = DataPoints.syntheticData(manager, trueW, trueB, 1000);
