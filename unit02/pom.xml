@@ -97,9 +97,14 @@
             <artifactId>pytorch-engine</artifactId>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.pytorch</groupId>-->
+<!--            <artifactId>pytorch-native-cpu</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-native-cpu</artifactId>
+            <artifactId>pytorch-native-cu121</artifactId>
         </dependency>
 
         <dependency>

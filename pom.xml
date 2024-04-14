@@ -36,6 +36,7 @@
         <djl.version>0.26.0</djl.version>
         <mxnet.native.mkl.version>1.9.1</mxnet.native.mkl.version>
         <pytorch.native.cpu.version>2.1.1</pytorch.native.cpu.version>
+        <pytorch.native.cu121.version>2.1.1</pytorch.native.cu121.version>
         <pytorch.jni.version>2.1.1-0.26.0</pytorch.jni.version>
         <tablesaw.jsplot.version>0.43.1</tablesaw.jsplot.version>
         <hutool.version>5.8.26</hutool.version>
@@ -128,6 +129,12 @@
                 <groupId>ai.djl.pytorch</groupId>
                 <artifactId>pytorch-native-cpu</artifactId>
                 <version>${pytorch.native.cpu.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ai.djl.pytorch</groupId>
+                <artifactId>pytorch-native-cu121</artifactId>
+                <version>${pytorch.native.cu121.version}</version>
             </dependency>
 
             <dependency>
