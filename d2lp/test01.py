@@ -1,6 +1,11 @@
 import os
+
+import numpy as np
 import pandas as pd
 import torch
+from d2l import torch as d2l
+from matplotlib_inline import backend_inline
+from torch.distributions import multinomial
 
 # 2.1.1
 print("2.1.1 --------------------")
@@ -177,4 +182,178 @@ print(A.shape, x.shape, torch.mv(A, x))
 
 # 2.3.9
 print("2.3.9 --------------------")
+B = torch.ones(4, 3)
+print(torch.mm(A, B))
 
+# 2.3.10
+print("2.3.10 --------------------")
+u = torch.tensor([3.0, -4.0])
+print(torch.norm(u))
+print(torch.abs(u).sum())
+print(torch.norm(torch.ones((4, 9))))
+
+# 2.4.1
+print("2.4.1 --------------------")
+
+
+def f(x):
+    return 3 * x ** 2 - 4 * x
+
+
+def numerical_lim(f, x, h):
+    return (f(x + h) - f(x)) / h
+
+
+h = 0.1
+for i in range(5):
+    print(f'h={h:.5f}, numerical limit={numerical_lim(f, 1, h):.5f}')
+    h *= 0.1
+
+
+def use_svg_display():  # @save
+    """使用svg格式在Jupyter中显示绘图"""
+    backend_inline.set_matplotlib_formats('svg')
+
+
+def set_figsize(figsize=(3.5, 2.5)):  # @save
+    """设置matplotlib的图表大小"""
+    use_svg_display()
+    d2l.plt.rcParams['figure.figsize'] = figsize
+
+
+# @save
+def set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
+    """设置matplotlib的轴"""
+    axes.set_xlabel(xlabel)
+    axes.set_ylabel(ylabel)
+    axes.set_xscale(xscale)
+    axes.set_yscale(yscale)
+    axes.set_xlim(xlim)
+    axes.set_ylim(ylim)
+    if legend:
+        axes.legend(legend)
+    axes.grid()
+
+
+# @save
+def plot(X, Y=None, xlabel=None, ylabel=None, legend=None, xlim=None,
+         ylim=None, xscale='linear', yscale='linear',
+         fmts=('-', 'm--', 'g-.', 'r:'), figsize=(3.5, 2.5), axes=None):
+    """绘制数据点"""
+    if legend is None:
+        legend = []
+    set_figsize(figsize)
+    axes = axes if axes else d2l.plt.gca()
+
+    # 如果X有一个轴，输出True
+    def has_one_axis(X):
+        return (hasattr(X, "ndim") and X.ndim == 1 or isinstance(X, list)
+                and not hasattr(X[0], "__len__"))
+        if has_one_axis(X):
+            X = [X]
+        if Y is None:
+            X, Y = [[]] * len(X), X
+        elif has_one_axis(Y):
+            Y = [Y]
+        if len(X) != len(Y):
+            X = X * len(Y)
+        axes.cla()
+        for x, y, fmt in zip(X, Y, fmts):
+            if len(x):
+                axes.plot(x, y, fmt)
+        else:
+            axes.plot(y, fmt)
+        set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
+
+
+x = np.arange(0, 3, 0.1)
+plot(x, [f(x), 2 * x - 3], 'x', 'f(x)', legend=['f(x)', 'Tangent line (x=1)'])
+
+# 2.5.1
+print("2.5.1 --------------------")
+x = torch.arange(4.0)
+print(x)
+
+x.requires_grad_(True)  # 等价于x=torch.arange(4.0,requires_grad=True)
+print(x.grad)
+
+y = 2 * torch.dot(x, x)
+print(y)
+
+y.backward()
+print(x.grad)
+
+print(x.grad == 4 * x)
+
+x.grad.zero_()
+y = x.sum()
+y.backward()
+print(x.grad)
+
+# 2.5.2
+print("2.5.2 --------------------")
+# 对非标量调用backward需要传入一个gradient参数，该参数指定微分函数关于self的梯度。
+# 本例只想求偏导数的和，所以传递一个1的梯度是合适的
+x.grad.zero_()
+y = x * x
+# 等价于y.backward(torch.ones(len(x)))
+y.sum().backward()
+print(x.grad)
+
+# 2.5.3
+print("2.5.3 --------------------")
+x.grad.zero_()
+y = x * x
+u = y.detach()
+
+z = u * x
+z.sum().backward()
+print(x.grad == u)
+
+x.grad.zero_()
+y.sum().backward()
+print(x.grad == 2 * x)
+
+# 2.5.4
+print("2.5.4 --------------------")
+
+
+def f(a):
+    b = a * 2
+    while b.norm() < 1000:
+        b = b * 2
+    if b.sum() > 0:
+        c = b
+    else:
+        c = 100 * b
+    return c
+
+
+a = torch.randn(size=(), requires_grad=True)
+d = f(a)
+d.backward()
+print(a.grad == d / a)
+
+# 2.6.1
+print("2.6.1 --------------------")
+
+fair_probs = torch.ones([6]) / 6
+print(multinomial.Multinomial(1, fair_probs).sample())
+print(multinomial.Multinomial(10, fair_probs).sample())
+
+# 将结果存储为32位浮点数以进行除法
+counts = multinomial.Multinomial(1000, fair_probs).sample()
+print(counts / 1000) # 相对频率作为估计值
+
+counts = multinomial.Multinomial(10, fair_probs).sample((500,))
+cum_counts = counts.cumsum(dim=0)
+
+estimates = cum_counts / cum_counts.sum(dim=1, keepdims=True)
+d2l.set_figsize((6, 4.5))
+for i in range(6):
+    d2l.plt.plot(estimates[:, i].numpy(),
+                 label=("P(die=" + str(i + 1) + ")"))
+d2l.plt.axhline(y=0.167, color='black', linestyle='dashed')
+d2l.plt.gca().set_xlabel('Groups of experiments')
+d2l.plt.gca().set_ylabel('Estimated probability')
+d2l.plt.legend()
